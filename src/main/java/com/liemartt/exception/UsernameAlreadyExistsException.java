@@ -1,7 +1,7 @@
 package com.liemartt.exception;
 
 public class UsernameAlreadyExistsException extends RuntimeException {
-    public UsernameAlreadyExistsException(String errorMessage) {
-        super(errorMessage);
+    public UsernameAlreadyExistsException() {
+        super("Username already exists");
     }
 }
