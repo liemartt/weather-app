@@ -11,6 +11,8 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
+import java.io.IOException;
+
 @WebListener
 public class ThymeleafUtil implements ServletContextListener {
     private static final TemplateEngine engine = templateEngine();
@@ -21,8 +23,8 @@ public class ThymeleafUtil implements ServletContextListener {
         return new WebContext(iWebExchange);
     }
     
-    public static void process(WebContext context, String templateName) {
-        engine.process(templateName, context);
+    public static void process(WebContext context, String templateName, HttpServletResponse resp) throws IOException {
+        engine.process(templateName, context, resp.getWriter());
     }
     
     private static TemplateEngine templateEngine() {
