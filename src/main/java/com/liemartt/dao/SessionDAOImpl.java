@@ -12,14 +12,14 @@ import java.util.UUID;
 
 public class SessionDAOImpl implements SessionDAO {
     @Override
-    public Optional<Session> createSession(User user) {
+    public Session createSession(User user) {
         UUID uuid = UUID.randomUUID();
-        Session userSession = new Session(uuid, user, LocalDateTime.now().plusSeconds(5));
+        Session userSession = new Session(uuid, user, LocalDateTime.now().plusMinutes(30));
         try (org.hibernate.Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             session.persist(userSession);
             session.getTransaction().commit();
-            return Optional.of(userSession);
+            return userSession;
         }
     }
     

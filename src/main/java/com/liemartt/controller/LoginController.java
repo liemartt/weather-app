@@ -1,14 +1,17 @@
 package com.liemartt.controller;
 
-import com.liemartt.dao.UserDAO;
-import com.liemartt.dao.UserDAOImpl;
+import com.liemartt.dao.SessionDAO;
+import com.liemartt.dao.SessionDAOImpl;
 import com.liemartt.dto.UserDto;
+import com.liemartt.entity.Session;
+import com.liemartt.entity.User;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
 import com.liemartt.service.LoginService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,8 +21,8 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
-    private final UserDAO userDao = new UserDAOImpl();
     private final LoginService loginService = LoginService.getINSTANCE();
+    private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,11 +38,13 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
         try {
-            loginService.validateUser(userDto);
+            User user = loginService.validateUser(userDto);
+            Session session = sessionDAO.createSession(user);
+            resp.addCookie(new Cookie("sessionId", session.getId().toString()));
+            resp.sendRedirect(req.getContextPath() + "/");
         } catch (UserNotFoundException | IncorrectPasswordException e) {
             context.setVariable("error", e.getMessage());//TODO responseEntity?
             ThymeleafUtil.process(context, "login.html", resp);
-            return;
         }
     }
 }

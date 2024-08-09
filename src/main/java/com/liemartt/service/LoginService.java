@@ -24,11 +24,12 @@ public class LoginService {
     private LoginService() {
     }
     
-    public void validateUser(UserDto userDto) throws UserNotFoundException, IncorrectPasswordException {
+    public User validateUser(UserDto userDto) throws UserNotFoundException, IncorrectPasswordException {
         Optional<User> userOptional = userDAO.getUserByUsername(userDto.getUsername());
         if (!BCrypt.checkpw(userDto.getPassword(), userOptional.get().getPassword())) {
             throw new IncorrectPasswordException();
         }
+        return userOptional.get();
     }
     
     

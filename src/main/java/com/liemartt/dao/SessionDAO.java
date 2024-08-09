@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SessionDAO {
-    Optional<Session> createSession(User user);
+    Session createSession(User user);
     
     void endSession(Session session);
     
