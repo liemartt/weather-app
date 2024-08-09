@@ -1,6 +1,6 @@
 package com.liemartt.controller;
 
-import com.liemartt.dto.SignupUserDto;
+import com.liemartt.dto.UserDto;
 import com.liemartt.exception.UsernameAlreadyExistsException;
 import com.liemartt.service.SignupService;
 import com.liemartt.util.ThymeleafUtil;
@@ -15,22 +15,22 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/signup")
 public class SignupController extends HttpServlet {
-    private final SignupService signupService = SignupService.getInstance();
+    private final SignupService signupService = SignupService.getINSTANCE();
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //TODO validate if user already in account
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
         ThymeleafUtil.process(context, "signup.html", resp);
     }
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
         
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        SignupUserDto userDto = new SignupUserDto(username, password);
+        UserDto userDto = new UserDto(username, password);
         try {
             signupService.signupNewUser(userDto);
         } catch (UsernameAlreadyExistsException e) {
@@ -38,5 +38,6 @@ public class SignupController extends HttpServlet {
             ThymeleafUtil.process(context, "signup.html", resp);
             return;
         }
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
