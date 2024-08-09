@@ -11,15 +11,15 @@
         <h1>Weather app</h1>
     </header>
 
-    <form class = "container" style="margin-top: 7%;">
+    <form class = "container" style="margin-top: 7%;" method="post">
         <div class="row justify-content-center">
             <div class="col-7 mb-3">
                 <label for="usernameField">Username</label>
-                <input type = "text" class = "form-control" id="usernameField">
+                <input type = "text" class = "form-control" id="usernameField" name = "username">
             </div>
             <div class="col-7 mb-3">
                 <label for="passwordField">Password</label>
-                <input type = "password" class = "form-control" id="passwordField">
+                <input type = "password" class = "form-control" id="passwordField" name = "password">
             </div>
             <a class="col-7 mb-3" href = "/register">Dont have an account</a>
             <button type="submit" class="btn btn-primary col-7 mb-3">Submit</button>
