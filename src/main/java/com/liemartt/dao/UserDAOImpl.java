@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user) throws UsernameAlreadyExistsException {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             session.persist(user);
@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
     }
     
     @Override
-    public Optional<User> getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) throws UserNotExistsException {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             User user = session.createSelectionQuery("FROM User where username=:username", User.class)
@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
     }
     
     @Override
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(Long id) throws UserNotExistsException {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             User user = session.createSelectionQuery("FROM User where id=:id", User.class)
