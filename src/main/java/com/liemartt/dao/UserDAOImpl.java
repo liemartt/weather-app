@@ -19,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
             session.getTransaction()
                     .commit();
         } catch (ConstraintViolationException e) {
-            throw new UsernameAlreadyExistsException();
+            throw new UsernameAlreadyExistsException(user.getUsername());
         }
     }
     
