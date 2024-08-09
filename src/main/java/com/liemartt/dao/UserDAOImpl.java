@@ -1,7 +1,7 @@
 package com.liemartt.dao;
 
 import com.liemartt.entity.User;
-import com.liemartt.exception.UserNotExistsException;
+import com.liemartt.exception.UserNotFoundException;
 import com.liemartt.exception.UsernameAlreadyExistsException;
 import com.liemartt.util.HibernateUtil;
 import jakarta.persistence.NoResultException;
@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
     }
     
     @Override
-    public Optional<User> getUserByUsername(String username) throws UserNotExistsException {
+    public Optional<User> getUserByUsername(String username) throws UserNotFoundException {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             User user = session.createSelectionQuery("FROM User where username=:username", User.class)
@@ -34,12 +34,12 @@ public class UserDAOImpl implements UserDAO {
                     .commit();
             return Optional.ofNullable(user);
         } catch (NoResultException e) {
-            throw new UserNotExistsException();
+            throw new UserNotFoundException();
         }
     }
     
     @Override
-    public Optional<User> getUserById(Long id) throws UserNotExistsException {
+    public Optional<User> getUserById(Long id) throws UserNotFoundException {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             User user = session.createSelectionQuery("FROM User where id=:id", User.class)
@@ -49,7 +49,7 @@ public class UserDAOImpl implements UserDAO {
                     .commit();
             return Optional.ofNullable(user);
         } catch (NoResultException e) {
-            throw new UserNotExistsException();
+            throw new UserNotFoundException();
         }
     }
 }
