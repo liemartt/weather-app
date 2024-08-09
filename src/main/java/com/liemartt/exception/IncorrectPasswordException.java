@@ -1,7 +1,8 @@
 package com.liemartt.exception;
 
 public class IncorrectPasswordException extends RuntimeException{
-    public IncorrectPasswordException(String errorMessage) {
-        super(errorMessage);
+    public IncorrectPasswordException() {
+        super("Incorrect password");
     }
+    
 }
