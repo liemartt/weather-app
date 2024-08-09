@@ -4,13 +4,16 @@ import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
 import com.liemartt.util.HibernateUtil;
 import jakarta.persistence.NoResultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class SessionDAOImpl implements SessionDAO {
+    private static final Logger log = LoggerFactory.getLogger(SessionDAOImpl.class);
+    
     @Override
     public Session createSession(User user) {
         UUID uuid = UUID.randomUUID();
@@ -33,15 +36,15 @@ public class SessionDAOImpl implements SessionDAO {
     }
     
     @Override
-    public List<Session> getAllExpiredSessions() {
+    public void endAllExpiredSessions() {
         LocalDateTime time = LocalDateTime.now();
         try (org.hibernate.Session session = HibernateUtil.getSession()) {
+            System.out.println("deleting expired sessions "+time);
             session.beginTransaction();
-            List<Session> expiredSessions = session.createSelectionQuery("from Session where expiresAt<:time", Session.class)
+            session.createMutationQuery("DELETE from Session where expiresAt<:time")
                     .setParameter("time", time)
-                    .getResultList();
+                    .executeUpdate();
             session.getTransaction().commit();
-            return expiredSessions;
         }
     }
     
