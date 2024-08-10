@@ -37,7 +37,7 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
         try {
-            User user = loginService.validateUser(userDto);
+            User user = loginService.validateUserCredentials(userDto);
             Session session = sessionDAO.createSession(user);
             resp.addCookie(new Cookie("sessionId", session.getId().toString()));
             resp.sendRedirect(req.getContextPath() + "/");
