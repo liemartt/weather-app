@@ -19,7 +19,6 @@ public class SignupController extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO validate if user already in account
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
         ThymeleafUtil.process(context, "signup.html", resp);
     }
@@ -27,7 +26,6 @@ public class SignupController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
-        
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
