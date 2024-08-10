@@ -16,15 +16,11 @@ import java.util.concurrent.TimeUnit;
 public class SessionService {
     @Getter
     private final static SessionService INSTANCE = new SessionService();
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     private SessionService() {
     }
     
-    public void scheduleSessionDeletion() {
-        scheduler.scheduleAtFixedRate(sessionDAO::endAllExpiredSessions, 0, 5, TimeUnit.MINUTES);
-    }
     
     public Optional<User> getAuthorizedUser(Cookie[] cookies) {
         Optional<Cookie> sessionCookie = Arrays.stream(cookies)
