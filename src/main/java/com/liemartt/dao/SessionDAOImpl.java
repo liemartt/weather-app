@@ -51,11 +51,11 @@ public class SessionDAOImpl implements SessionDAO {
     }
     
     @Override
-    public Optional<Session> getSessionByUUID(String sessionUUID) {
+    public Optional<Session> getSessionByUUID(UUID sessionUUID) {
         try (org.hibernate.Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
             Session userSession = session.createSelectionQuery("from Session where id=:uuid", Session.class)
-                    .setParameter("uuid", UUID.fromString(sessionUUID))
+                    .setParameter("uuid", sessionUUID)
                     .getSingleResult();
             session.getTransaction().commit();
             return Optional.ofNullable(userSession);

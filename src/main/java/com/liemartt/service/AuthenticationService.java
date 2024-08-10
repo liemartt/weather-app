@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 public class AuthenticationService {
     @Getter
@@ -19,18 +20,18 @@ public class AuthenticationService {
     }
     
     
-    public Optional<User> getAuthorizedUser(Cookie[] cookies) {
-        Optional<Cookie> sessionCookie = Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals("sessionId"))
-                .findFirst();
-        if (sessionCookie.isPresent()) {
-            String sessionId = sessionCookie.get().getValue();
-            Optional<Session> session = sessionDAO.getSessionByUUID(sessionId);
-            if (session.isPresent()) {
-                return Optional.of(session.get().getUser());
-            }
-        }
-        return Optional.empty();
+    public Optional<User> getAuthorizedUser(String sessionId) {
+        UUID sessionUUID = UUID.fromString(sessionId);
+        Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
+        return session.map(Session::getUser);
     }
+    
+    
+    public boolean isSessionValid(String sessionId){
+        UUID sessionUUID = UUID.fromString(sessionId);
+        Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
+        return session.isPresent();
+    }
+    
 }
 

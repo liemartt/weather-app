@@ -13,5 +13,5 @@ public interface SessionDAO {
     
     void endAllExpiredSessions();
     
-    Optional<Session> getSessionByUUID(String sessionUUID);
+    Optional<Session> getSessionByUUID(UUID sessionUUID);
 }

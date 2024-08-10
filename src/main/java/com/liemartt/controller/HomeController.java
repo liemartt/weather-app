@@ -5,12 +5,14 @@ import com.liemartt.service.AuthenticationService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @WebServlet(urlPatterns = "/")
@@ -20,12 +22,24 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
-        Optional<User> userOptional = authenticationService.getAuthorizedUser(req.getCookies());
-        if (userOptional.isEmpty()) {
+        Optional<Cookie> sessionCookie = Arrays.stream(req.getCookies())
+                .filter(cookie -> cookie.getName().equals("sessionId"))
+                .findFirst();
+        
+        Optional<String> sessionId = sessionCookie.map(Cookie::getValue);
+        if (sessionId.isEmpty()) {
             context.setVariable("error", "Please log in or sign up");
             ThymeleafUtil.process(context, "index.html", resp);
             return;
         }
+        
+        Optional<User> userOptional = authenticationService.getAuthorizedUser(sessionId.get());
+        if (userOptional.isEmpty()) {
+            context.setVariable("error", "Your session has expired, please log in again");
+            ThymeleafUtil.process(context, "index.html", resp);
+            return;
+        }
+        
         User authorizedUser = userOptional.get();
         context.setVariable("user", authorizedUser);
         ThymeleafUtil.process(context, "index.html", resp);
