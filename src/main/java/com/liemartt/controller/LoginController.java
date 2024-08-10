@@ -8,7 +8,6 @@ import com.liemartt.entity.User;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
 import com.liemartt.service.LoginService;
-import com.liemartt.service.SessionService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {

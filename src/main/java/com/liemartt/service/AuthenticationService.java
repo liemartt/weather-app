@@ -9,16 +9,13 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-public class SessionService {
+public class AuthenticationService {
     @Getter
-    private final static SessionService INSTANCE = new SessionService();
+    private final static AuthenticationService INSTANCE = new AuthenticationService();
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
-    private SessionService() {
+    private AuthenticationService() {
     }
     
     
