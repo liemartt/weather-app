@@ -1,7 +1,6 @@
 package com.liemartt.controller;
 
 import com.liemartt.entity.User;
-import com.liemartt.exception.UserNotAuthorizedException;
 import com.liemartt.service.SessionService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/")
 public class HomeController extends HttpServlet {
@@ -20,14 +20,15 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
-        try {
-            User user = sessionService.getAuthorizedUser(req.getCookies());
-        } catch (UserNotAuthorizedException e) {
+        Optional<User> userOptional = sessionService.getAuthorizedUser(req.getCookies());
+        if (userOptional.isEmpty()) {
             context.setVariable("error", "Please log in or sign up");
             ThymeleafUtil.process(context, "index.html", resp);
             return;
         }
-        
+        User authorizedUser = userOptional.get();
+        context.setVariable("user", authorizedUser);
+        ThymeleafUtil.process(context, "index.html", resp);
     }
     
     @Override

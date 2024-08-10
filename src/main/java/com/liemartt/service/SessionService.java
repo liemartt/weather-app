@@ -4,7 +4,6 @@ import com.liemartt.dao.SessionDAO;
 import com.liemartt.dao.SessionDAOImpl;
 import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
-import com.liemartt.exception.UserNotAuthorizedException;
 import jakarta.servlet.http.Cookie;
 import lombok.Getter;
 
@@ -27,7 +26,7 @@ public class SessionService {
         scheduler.scheduleAtFixedRate(sessionDAO::endAllExpiredSessions, 0, 5, TimeUnit.MINUTES);
     }
     
-    public User getAuthorizedUser(Cookie[] cookies) {
+    public Optional<User> getAuthorizedUser(Cookie[] cookies) {
         Optional<Cookie> sessionCookie = Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("sessionId"))
                 .findFirst();
@@ -35,10 +34,10 @@ public class SessionService {
             String sessionId = sessionCookie.get().getValue();
             Optional<Session> session = sessionDAO.getSessionByUUID(sessionId);
             if (session.isPresent()) {
-                return session.get().getUser();
+                return Optional.of(session.get().getUser());
             }
         }
-        throw new UserNotAuthorizedException();
+        return Optional.empty();
     }
 }
 

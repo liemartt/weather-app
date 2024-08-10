@@ -8,6 +8,7 @@ import com.liemartt.entity.User;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
 import com.liemartt.service.LoginService;
+import com.liemartt.service.SessionService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,10 +19,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
     private final LoginService loginService = LoginService.getINSTANCE();
+    private final SessionService sessionService = SessionService.getINSTANCE();
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override
@@ -33,7 +36,6 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
-        
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
@@ -47,4 +49,5 @@ public class LoginController extends HttpServlet {
             ThymeleafUtil.process(context, "login.html", resp);
         }
     }
+    
 }
