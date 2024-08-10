@@ -27,10 +27,12 @@ public class SessionDAOImpl implements SessionDAO {
     }
     
     @Override
-    public void endSession(Session userSession) {
+    public void endSession(UUID userSession) {
         try (org.hibernate.Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
-            session.remove(userSession);
+            session.createMutationQuery("delete from Session where id=:id")
+                    .setParameter("id", userSession)
+                    .executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -39,7 +41,7 @@ public class SessionDAOImpl implements SessionDAO {
     public void endAllExpiredSessions() {
         LocalDateTime time = LocalDateTime.now();
         try (org.hibernate.Session session = HibernateUtil.getSession()) {
-            System.out.println("deleting expired sessions "+time);
+            System.out.println("deleting expired sessions " + time);
             session.beginTransaction();
             session.createMutationQuery("DELETE from Session where expiresAt<:time")
                     .setParameter("time", time)

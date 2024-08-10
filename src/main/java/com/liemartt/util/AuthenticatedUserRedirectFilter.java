@@ -20,7 +20,7 @@ public class AuthenticatedUserRedirectFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         
-        Optional<User> userOptional = sessionService.getAuthorizedUser(req.getCookies());
+        Optional<User> userOptional = sessionService.getAuthorizedUser(req.getCookies()); //todo create validateSession() or smth
         if (userOptional.isPresent()) {
             resp.sendRedirect(req.getContextPath() + "/");
         } else {

@@ -24,7 +24,6 @@ import java.util.Optional;
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
     private final LoginService loginService = LoginService.getINSTANCE();
-    private final SessionService sessionService = SessionService.getINSTANCE();
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override

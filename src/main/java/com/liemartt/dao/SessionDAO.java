@@ -4,11 +4,12 @@ import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface SessionDAO {
     Session createSession(User user);
     
-    void endSession(Session session);
+    void endSession(UUID sessionId);
     
     void endAllExpiredSessions();
     

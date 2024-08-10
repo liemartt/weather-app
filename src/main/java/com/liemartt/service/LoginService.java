@@ -33,8 +33,8 @@ public class LoginService {
     }
     
     
-    public boolean isSessionValid(UUID sessionUUID) {//todo move in SessionService?
-        Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
-        return session.isPresent();
-    }
+//    public boolean isSessionValid(UUID sessionUUID) {//todo move in SessionService?
+//        Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
+//        return session.isPresent();
+//    }
 }
