@@ -4,7 +4,6 @@ import com.liemartt.dao.SessionDAO;
 import com.liemartt.dao.SessionDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.entity.Session;
-import com.liemartt.entity.User;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
 import com.liemartt.service.LoginService;
@@ -37,8 +36,7 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
         try {
-            User user = loginService.validateUserCredentials(userDto);
-            Session session = sessionDAO.createSession(user);
+            Session session = loginService.loginUser(userDto);
             resp.addCookie(new Cookie("sessionId", session.getId().toString()));
             resp.sendRedirect(req.getContextPath() + "/");
         } catch (UserNotFoundException | IncorrectPasswordException e) {
