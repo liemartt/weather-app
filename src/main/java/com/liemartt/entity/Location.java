@@ -28,4 +28,15 @@ public class Location {
     
     private BigDecimal latitude;
     private BigDecimal longitude;
+    
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", user=" + user +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }
