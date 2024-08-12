@@ -8,6 +8,7 @@ import com.liemartt.entity.Location;
 import com.liemartt.exception.InvalidLocationNameException;
 import com.liemartt.exception.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -22,13 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherApiService {
+    @Getter
+    private final static WeatherApiService INSTANCE = new WeatherApiService();
+    private final static HttpClient client = HttpClient.newHttpClient();
+    
     private final String API_KEY = System.getenv("API_KEY");
     private final String BASE_URI = "https://api.openweathermap.org/";
     private final String SUFFIX_WEATHER_URI = "data/2.5/weather";
     private final String SUFFIX_LOCATION_URI = "geo/1.0/direct";
+    private WeatherApiService() {
+    }
     
     public List<LocationResponseDto> searchLocationsByName(String locationName) throws URISyntaxException, IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request;
         
         try {
@@ -61,6 +67,9 @@ public class WeatherApiService {
                         .GET()
                         .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new WeatherApiException("Error fetching weather");
+        }
         return getWeatherFromJson(response.body());
     }
     
