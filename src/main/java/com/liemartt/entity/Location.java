@@ -39,4 +39,17 @@ public class Location {
                 ", longitude=" + longitude +
                 '}';
     }
+    
+    public Location(String name, User user, BigDecimal latitude, BigDecimal longitude) {
+        this.name = name;
+        this.user = user;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    
+    public Location(BigDecimal longitude, BigDecimal latitude, String name) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.name = name;
+    }
 }
