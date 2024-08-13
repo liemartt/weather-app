@@ -45,7 +45,7 @@ public class LoginServiceTest {
         
         com.liemartt.entity.Session session = loginService.loginUser(userDto);
         
-        Assertions.assertNotNull(sessionDAO.getSessionByUUID(session.getId()).map(com.liemartt.entity.Session::getId));
+        Assertions.assertNotNull(sessionDAO.findById(session.getId()).map(com.liemartt.entity.Session::getId));
     }
     
     @Test

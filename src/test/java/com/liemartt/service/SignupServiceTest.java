@@ -4,7 +4,7 @@ import com.liemartt.TestConfig;
 import com.liemartt.dao.UserDAO;
 import com.liemartt.dao.UserDAOImpl;
 import com.liemartt.dto.UserDto;
-import com.liemartt.exception.UsernameAlreadyExistsException;
+import com.liemartt.exception.UsernameExistsException;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +40,7 @@ public class SignupServiceTest {
         
         signupService.signupNewUser(userDto);
         
-        Assertions.assertNotNull(userDAO.getUserByUsername(userDto.getUsername())
+        Assertions.assertNotNull(userDAO.findByUsername(userDto.getUsername())
                 .get());
     }
     
@@ -51,7 +51,7 @@ public class SignupServiceTest {
         signupService.signupNewUser(userDto);
         
         Assertions.assertThrows(
-                UsernameAlreadyExistsException.class,
+                UsernameExistsException.class,
                 () -> signupService.signupNewUser(userDto));
     }
 }

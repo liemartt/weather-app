@@ -24,8 +24,8 @@ public class User {
     
     private String password;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Location> locations = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Location> locations;
     
     public User(String username, String password) {
         this.username = username;
@@ -43,5 +43,9 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hashCode(username);
+    }
+    
+    public void addLocation(Location location) {
+        locations.add(location);
     }
 }

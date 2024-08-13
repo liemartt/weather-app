@@ -58,7 +58,7 @@ public class WeatherApiService {
         
         List<LocationResponseDto> locationsFromJson = getLocationsFromJson(response.body());
         if (locationsFromJson.isEmpty()) {
-            throw new LocationNotFoundException();
+            throw new LocationNotFoundException("Nothing found");
         }
         return locationsFromJson;
     }

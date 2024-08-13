@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = "/logout")
-public class AuthenticatedUserLogoutFilter implements Filter {
+@WebFilter(urlPatterns = {"/logout", "/search"})
+public class NonAuthenticatedUserRedirectFilter implements Filter {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     
     @Override

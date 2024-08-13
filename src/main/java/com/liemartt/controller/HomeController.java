@@ -1,6 +1,7 @@
 package com.liemartt.controller;
 
 import com.liemartt.dto.LocationResponseDto;
+import com.liemartt.dto.WeatherResponseDto;
 import com.liemartt.entity.User;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.service.WeatherApiService;
@@ -15,6 +16,7 @@ import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @WebServlet(urlPatterns = "/")
 public class HomeController extends HttpServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
+    private final WeatherApiService weatherApiService = WeatherApiService.getINSTANCE();
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,7 +48,11 @@ public class HomeController extends HttpServlet {
         }
         
         User authorizedUser = userOptional.get();
+        List<WeatherResponseDto> weather = new ArrayList<>();
+        authorizedUser.getLocations().forEach(location -> weather.add(weatherApiService.searchWeatherByLocation(location)));
+        
         context.setVariable("user", authorizedUser);
+        context.setVariable("weatherList", weather);
         ThymeleafUtil.process(context, "index.html", resp);
     }
     

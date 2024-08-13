@@ -25,5 +25,4 @@ public class HibernateUtil {
         return cfg.buildSessionFactory();
     }
     
-    
 }

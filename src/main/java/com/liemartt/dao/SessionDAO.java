@@ -1,17 +1,16 @@
 package com.liemartt.dao;
 
 import com.liemartt.entity.Session;
-import com.liemartt.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface SessionDAO {
-    Session createSession(User user);
+    void save(Session session);
     
-    void endSession(UUID sessionId);
+    void delete(UUID sessionId);
     
-    void endAllExpiredSessions();
+    void deleteExpiredSessions();
     
-    Optional<Session> getSessionByUUID(UUID sessionUUID);
+    Optional<Session> findById(UUID sessionId);
 }

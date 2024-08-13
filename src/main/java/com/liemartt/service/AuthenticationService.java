@@ -21,7 +21,7 @@ public class AuthenticationService {
     public Optional<User> getAuthorizedUser(String sessionId) {
         try {
             UUID sessionUUID = UUID.fromString(sessionId);
-            Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
+            Optional<Session> session = sessionDAO.findById(sessionUUID);
             return session.map(Session::getUser);
         } catch (IllegalArgumentException e) {
             return Optional.empty();
@@ -32,7 +32,7 @@ public class AuthenticationService {
     public boolean isSessionValid(String sessionId) {
         try {
             UUID sessionUUID = UUID.fromString(sessionId);
-            Optional<Session> session = sessionDAO.getSessionByUUID(sessionUUID);
+            Optional<Session> session = sessionDAO.findById(sessionUUID);
             return session.isPresent();
         } catch (IllegalArgumentException e) {
             return false;

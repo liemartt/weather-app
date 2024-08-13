@@ -1,9 +1,6 @@
 package com.liemartt.dto;
 
-import com.liemartt.dto.weather.MainDto;
-import com.liemartt.dto.weather.SysDto;
-import com.liemartt.dto.weather.WeatherDto;
-import com.liemartt.dto.weather.WindDto;
+import com.liemartt.dto.weather.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,4 +15,5 @@ public class WeatherResponseDto {
     private WindDto wind;
     private SysDto sys;
     private String name;
+    private Coordinate coord;
 }

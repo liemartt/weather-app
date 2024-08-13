@@ -31,7 +31,7 @@ public class LoginController extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
+        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());//TODO base servlet
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);

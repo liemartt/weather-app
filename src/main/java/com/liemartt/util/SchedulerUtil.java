@@ -12,6 +12,6 @@ public class SchedulerUtil {
     private final static SessionDAO sessionDAO = new SessionDAOImpl();
     
     public static void scheduleSessionDeletion() {
-        scheduler.scheduleAtFixedRate(sessionDAO::endAllExpiredSessions, 0, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(sessionDAO::deleteExpiredSessions, 0, 5, TimeUnit.MINUTES);
     }
 }

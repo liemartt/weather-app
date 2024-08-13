@@ -26,7 +26,7 @@ public class LogoutController extends HttpServlet {
         String sessionId = sessionCookie.get().getValue();
         
         UUID sessionUUID = UUID.fromString(sessionId);
-        sessionDAO.endSession(sessionUUID);
+        sessionDAO.delete(sessionUUID);
         
         sessionCookie.get().setMaxAge(0);
         resp.addCookie(sessionCookie.get());

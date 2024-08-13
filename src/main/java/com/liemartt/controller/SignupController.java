@@ -1,7 +1,7 @@
 package com.liemartt.controller;
 
 import com.liemartt.dto.UserDto;
-import com.liemartt.exception.UsernameAlreadyExistsException;
+import com.liemartt.exception.UsernameExistsException;
 import com.liemartt.service.SignupService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
@@ -31,7 +31,7 @@ public class SignupController extends HttpServlet {
         UserDto userDto = new UserDto(username, password);
         try {
             signupService.signupNewUser(userDto);
-        } catch (UsernameAlreadyExistsException e) {
+        } catch (UsernameExistsException e) {
             context.setVariable("error", e.getMessage());//TODO responseEntity?
             ThymeleafUtil.process(context, "signup.html", resp);
             return;

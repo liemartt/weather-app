@@ -54,7 +54,7 @@ public class AuthenticationServiceTest {
         com.liemartt.entity.Session session = loginService.loginUser(userDto);
         String sessionId = session.getId().toString();
         
-        sessionDAO.endSession(session.getId());
+        sessionDAO.delete(session.getId());
         
         Assertions.assertFalse(authenticationService.isSessionValid(sessionId));
     }
