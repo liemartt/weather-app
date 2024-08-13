@@ -8,7 +8,7 @@ import com.liemartt.entity.Location;
 import com.liemartt.exception.InvalidLocationNameException;
 import com.liemartt.exception.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
-import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -23,29 +23,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherApiService {
-    @Getter
-    private final static WeatherApiService INSTANCE = new WeatherApiService();
-    private final static HttpClient client = HttpClient.newHttpClient();
-    
+    private static WeatherApiService INSTANCE;
+    private final HttpClient client;
     private final String API_KEY = System.getenv("API_KEY");
     private final String BASE_URI = "https://api.openweathermap.org/";
     private final String SUFFIX_WEATHER_URI = "data/2.5/weather";
     private final String SUFFIX_LOCATION_URI = "geo/1.0/direct";
-    private WeatherApiService() {
+    public WeatherApiService(HttpClient client) {
+        this.client = client;
+        INSTANCE = this;
     }
     
-    public List<LocationResponseDto> searchLocationsByName(String locationName) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest request;
-        
-        try {
-            URI uri = createUriForLocationSearch(locationName);
-            request = HttpRequest.newBuilder(uri)
-                    .GET()
-                    .build();
-        } catch (URISyntaxException e) {
-            throw new InvalidLocationNameException();
+    private WeatherApiService() {
+        client = HttpClient.newHttpClient();
+    }
+    public static WeatherApiService getINSTANCE(){
+        if(INSTANCE==null){
+            INSTANCE = new WeatherApiService();
         }
+        return INSTANCE;
+    }
+    @SneakyThrows
+    public List<LocationResponseDto> searchLocationsByName(String locationName) {
         
+        URI uri = createUriForLocationSearch(locationName);
+        HttpRequest request = createRequestFromURI(uri);
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         
         if (response.statusCode() != 200) {
@@ -60,12 +63,8 @@ public class WeatherApiService {
     }
     
     public WeatherResponseDto searchWeatherByLocation(Location location) throws URISyntaxException, IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uri = createUriForWeatherSearch(location);
-        HttpRequest request =
-                HttpRequest.newBuilder(uri)
-                        .GET()
-                        .build();
+        HttpRequest request = createRequestFromURI(uri);
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
             throw new WeatherApiException("Error fetching weather");
@@ -73,7 +72,7 @@ public class WeatherApiService {
         return getWeatherFromJson(response.body());
     }
     
-    private List<LocationResponseDto> getLocationsFromJson(String json) {
+    public List<LocationResponseDto> getLocationsFromJson(String json) {
         Gson gson = new Gson();
         
         Type listType = new TypeToken<ArrayList<LocationResponseDto>>() {
@@ -81,12 +80,12 @@ public class WeatherApiService {
         return gson.fromJson(json, listType);
     }
     
-    private WeatherResponseDto getWeatherFromJson(String json) {
+    public WeatherResponseDto getWeatherFromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, WeatherResponseDto.class);
     }
     
-    private URI createUriForLocationSearch(String locationName) throws URISyntaxException {
+    public URI createUriForLocationSearch(String locationName) throws URISyntaxException {
         String locationNameEncoded = URLEncoder.encode(locationName, StandardCharsets.UTF_8);
         StringBuilder sb = new StringBuilder();
         sb.append(BASE_URI)
@@ -99,7 +98,7 @@ public class WeatherApiService {
         return new URI(sb.toString());
     }
     
-    private URI createUriForWeatherSearch(Location location) throws URISyntaxException {
+    public URI createUriForWeatherSearch(Location location) throws URISyntaxException {
         StringBuilder sb = new StringBuilder();
         sb.append(BASE_URI)
                 .append(SUFFIX_WEATHER_URI)
@@ -113,5 +112,11 @@ public class WeatherApiService {
                 .append("&appid=")
                 .append(API_KEY);
         return new URI(sb.toString());
+    }
+    
+    public HttpRequest createRequestFromURI(URI uri) {
+        return HttpRequest.newBuilder(uri)
+                .GET()
+                .build();
     }
 }
