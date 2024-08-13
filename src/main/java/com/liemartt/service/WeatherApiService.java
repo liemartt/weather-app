@@ -29,11 +29,11 @@ public class WeatherApiService {
     private final String BASE_URI = "https://api.openweathermap.org/";
     private final String SUFFIX_WEATHER_URI = "data/2.5/weather";
     private final String SUFFIX_LOCATION_URI = "geo/1.0/direct";
+    
     public WeatherApiService(HttpClient client) {
         this.client = client;
         INSTANCE = this;
     }
-    
     private WeatherApiService() {
         client = HttpClient.newHttpClient();
     }
@@ -43,8 +43,9 @@ public class WeatherApiService {
         }
         return INSTANCE;
     }
+    
     @SneakyThrows
-    public List<LocationResponseDto> searchLocationsByName(String locationName) {
+    public List<LocationResponseDto> searchLocationsByName(String locationName) throws LocationNotFoundException, WeatherApiException {
         
         URI uri = createUriForLocationSearch(locationName);
         HttpRequest request = createRequestFromURI(uri);
@@ -62,7 +63,8 @@ public class WeatherApiService {
         return locationsFromJson;
     }
     
-    public WeatherResponseDto searchWeatherByLocation(Location location) throws URISyntaxException, IOException, InterruptedException {
+    @SneakyThrows
+    public WeatherResponseDto searchWeatherByLocation(Location location) throws LocationNotFoundException, WeatherApiException {
         URI uri = createUriForWeatherSearch(location);
         HttpRequest request = createRequestFromURI(uri);
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
