@@ -1,4 +1,4 @@
-package com.liemartt.dto;
+package com.liemartt.dto.weather;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.liemartt.dto;
+package com.liemartt.dto.weather;
 
 import lombok.Data;
 

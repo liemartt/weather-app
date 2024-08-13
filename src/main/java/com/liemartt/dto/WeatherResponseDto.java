@@ -1,10 +1,12 @@
 package com.liemartt.dto;
 
-import com.google.gson.annotations.SerializedName;
+import com.liemartt.dto.weather.MainDto;
+import com.liemartt.dto.weather.SysDto;
+import com.liemartt.dto.weather.WeatherDto;
+import com.liemartt.dto.weather.WindDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
