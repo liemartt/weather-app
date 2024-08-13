@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -45,4 +46,27 @@ public class Location {
         this.name = name;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return Objects.equals(user, location.user) && Objects.equals(latitude, location.latitude) && Objects.equals(longitude, location.longitude);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, latitude, longitude);
+    }
+    
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", user=" + user +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }

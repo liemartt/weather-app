@@ -1,9 +1,9 @@
 package com.liemartt.service;
 
-import com.liemartt.dao.SessionDAO;
-import com.liemartt.dao.SessionDAOImpl;
-import com.liemartt.dao.UserDAO;
-import com.liemartt.dao.UserDAOImpl;
+import com.liemartt.dao.session.SessionDAO;
+import com.liemartt.dao.session.SessionDAOImpl;
+import com.liemartt.dao.user.UserDAO;
+import com.liemartt.dao.user.UserDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.entity.Session;
 import com.liemartt.entity.User;

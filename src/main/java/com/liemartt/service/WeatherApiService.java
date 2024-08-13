@@ -2,15 +2,13 @@ package com.liemartt.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.liemartt.dto.LocationResponseDto;
-import com.liemartt.dto.WeatherResponseDto;
+import com.liemartt.dto.location.LocationApiResponseDto;
+import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
-import com.liemartt.exception.InvalidLocationNameException;
 import com.liemartt.exception.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,7 +43,7 @@ public class WeatherApiService {
     }
     
     @SneakyThrows
-    public List<LocationResponseDto> searchLocationsByName(String locationName) throws LocationNotFoundException, WeatherApiException {
+    public List<LocationApiResponseDto> searchLocationsByName(String locationName) throws LocationNotFoundException, WeatherApiException {
         
         URI uri = createUriForLocationSearch(locationName);
         HttpRequest request = createRequestFromURI(uri);
@@ -56,7 +54,7 @@ public class WeatherApiService {
             throw new WeatherApiException("Error fetching weather");
         }
         
-        List<LocationResponseDto> locationsFromJson = getLocationsFromJson(response.body());
+        List<LocationApiResponseDto> locationsFromJson = getLocationsFromJson(response.body());
         if (locationsFromJson.isEmpty()) {
             throw new LocationNotFoundException("Nothing found");
         }
@@ -64,7 +62,7 @@ public class WeatherApiService {
     }
     
     @SneakyThrows
-    public WeatherResponseDto searchWeatherByLocation(Location location) throws LocationNotFoundException, WeatherApiException {
+    public WeatherApiResponseDto searchWeatherByLocation(Location location) throws LocationNotFoundException, WeatherApiException {
         URI uri = createUriForWeatherSearch(location);
         HttpRequest request = createRequestFromURI(uri);
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -74,17 +72,17 @@ public class WeatherApiService {
         return getWeatherFromJson(response.body());
     }
     
-    public List<LocationResponseDto> getLocationsFromJson(String json) {
+    public List<LocationApiResponseDto> getLocationsFromJson(String json) {
         Gson gson = new Gson();
         
-        Type listType = new TypeToken<ArrayList<LocationResponseDto>>() {
+        Type listType = new TypeToken<ArrayList<LocationApiResponseDto>>() {
         }.getType();
         return gson.fromJson(json, listType);
     }
     
-    public WeatherResponseDto getWeatherFromJson(String json) {
+    public WeatherApiResponseDto getWeatherFromJson(String json) {
         Gson gson = new Gson();
-        return gson.fromJson(json, WeatherResponseDto.class);
+        return gson.fromJson(json, WeatherApiResponseDto.class);
     }
     
     public URI createUriForLocationSearch(String locationName) throws URISyntaxException {

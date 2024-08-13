@@ -1,4 +1,4 @@
-package com.liemartt.dto;
+package com.liemartt.dto.location;
 
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;

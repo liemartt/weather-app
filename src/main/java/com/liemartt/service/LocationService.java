@@ -1,14 +1,18 @@
 package com.liemartt.service;
 
 import com.google.gson.Gson;
-import com.liemartt.dao.LocationDAO;
-import com.liemartt.dao.LocationDAOImpl;
-import com.liemartt.dto.LocationResponseDto;
-import com.liemartt.dto.SaveLocationRequestDto;
+import com.liemartt.dao.location.LocationDAO;
+import com.liemartt.dao.location.LocationDAOImpl;
+import com.liemartt.dto.location.DeleteLocationRequestDto;
+import com.liemartt.dto.location.LocationApiResponseDto;
+import com.liemartt.dto.location.SaveLocationRequestDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
 import com.liemartt.exception.LocationExistsException;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.Optional;
 
 public class LocationService {
     @Getter
@@ -22,8 +26,7 @@ public class LocationService {
     
     public Location getLocationFromJson(String json) {
         Gson gson = new Gson();
-        LocationResponseDto dto = gson.fromJson(json, LocationResponseDto.class);
-        
+        LocationApiResponseDto dto = gson.fromJson(json, LocationApiResponseDto.class);
         return new Location(dto.getLon(), dto.getLat(), dto.getName());
     }
     
@@ -36,4 +39,21 @@ public class LocationService {
         
         locationDAO.save(location);
     }
+    
+    public void deleteLocation(DeleteLocationRequestDto dto) {
+        User user = dto.getUser();
+        Optional<Location> locationToDelete =
+                user.getLocations()
+                        .stream()
+                        .filter(userLocation -> userLocation.getId().equals(dto.getLocationId()))
+                        .findFirst();
+
+        if (locationToDelete.isPresent()) {
+            Location location = locationToDelete.get();
+            
+            user.getLocations().remove(location);
+            locationDAO.delete(location);
+        }
+    }
+    
 }

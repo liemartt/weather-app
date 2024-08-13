@@ -1,9 +1,12 @@
 package com.liemartt.controller;
 
-import com.liemartt.dto.LocationResponseDto;
-import com.liemartt.dto.WeatherResponseDto;
+import com.liemartt.dto.WeatherWebDto;
+import com.liemartt.dto.location.DeleteLocationRequestDto;
+import com.liemartt.dto.weather.WeatherApiResponseDto;
+import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
 import com.liemartt.service.AuthenticationService;
+import com.liemartt.service.LocationService;
 import com.liemartt.service.WeatherApiService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
@@ -15,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class HomeController extends HttpServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     private final WeatherApiService weatherApiService = WeatherApiService.getINSTANCE();
+    private final LocationService locationService = LocationService.getINSTANCE();
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,8 +51,9 @@ public class HomeController extends HttpServlet {
         }
         
         User authorizedUser = userOptional.get();
-        List<WeatherResponseDto> weather = new ArrayList<>();
-        authorizedUser.getLocations().forEach(location -> weather.add(weatherApiService.searchWeatherByLocation(location)));
+        List<WeatherWebDto> weather = new ArrayList<>();
+        authorizedUser.getLocations()
+                .forEach(location -> weather.add(createWeatherWebDto(location)));
         
         context.setVariable("user", authorizedUser);
         context.setVariable("weatherList", weather);
@@ -58,14 +62,19 @@ public class HomeController extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String locationName = req.getParameter("locationName");
-//        try {
-//            List<LocationResponseDto> locationResponseDto = new WeatherApiService().searchLocationsByName(locationName);
-//            String response = new WeatherApiService().searchWeatherByLocation(locationResponseDto.get(0).getLocation());
-//            resp.setContentType("application/json");
-//            resp.getWriter().write(response);
-//        } catch (URISyntaxException | InterruptedException  e) {
-//            e.printStackTrace();
-//        }
+        WebContext context = ThymeleafUtil.getWebContext(req, resp, req.getServletContext());
+        String sessionId = Arrays.stream(req.getCookies()).filter(cookie -> cookie.getName().equals("sessionId"))
+                .findFirst().get().getValue();
+        String locationId = req.getParameter("location_id");
+        
+        User user = authenticationService.getAuthorizedUser(sessionId).get();
+        
+        DeleteLocationRequestDto dto = new DeleteLocationRequestDto(user, Long.valueOf(locationId));
+        locationService.deleteLocation(dto);
+        this.doGet(req, resp);
+    }
+    private WeatherWebDto createWeatherWebDto(Location location){
+        WeatherApiResponseDto response = weatherApiService.searchWeatherByLocation(location);
+        return new WeatherWebDto(location.getId(), response);
     }
 }

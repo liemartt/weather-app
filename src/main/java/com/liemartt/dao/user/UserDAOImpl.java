@@ -1,4 +1,4 @@
-package com.liemartt.dao;
+package com.liemartt.dao.user;
 
 import com.liemartt.entity.User;
 import com.liemartt.exception.UserNotFoundException;

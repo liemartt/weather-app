@@ -1,7 +1,7 @@
 package com.liemartt.controller;
 
-import com.liemartt.dto.LocationResponseDto;
-import com.liemartt.dto.SaveLocationRequestDto;
+import com.liemartt.dto.location.LocationApiResponseDto;
+import com.liemartt.dto.location.SaveLocationRequestDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
 import com.liemartt.exception.LocationExistsException;
@@ -34,7 +34,7 @@ public class SearchLocationController extends HttpServlet {
         String locationName = req.getParameter("location");
         
         try {
-            List<LocationResponseDto> locations = weatherApiService.searchLocationsByName(locationName);
+            List<LocationApiResponseDto> locations = weatherApiService.searchLocationsByName(locationName);
             context.setVariable("locations", locations);
         } catch (LocationNotFoundException | WeatherApiException e) {
             context.setVariable("message", e.getMessage());

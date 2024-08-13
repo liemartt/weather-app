@@ -1,4 +1,4 @@
-package com.liemartt.dao;
+package com.liemartt.dao.location;
 
 import com.liemartt.entity.Location;
 import com.liemartt.exception.DBException;
@@ -39,5 +39,6 @@ public class LocationDAOImpl implements LocationDAO {
             throw new DBException("DB is unavailable");
         }
     }
+    
     
 }

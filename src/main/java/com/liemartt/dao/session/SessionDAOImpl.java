@@ -1,7 +1,6 @@
-package com.liemartt.dao;
+package com.liemartt.dao.session;
 
 import com.liemartt.entity.Session;
-import com.liemartt.entity.User;
 import com.liemartt.util.HibernateUtil;
 import jakarta.persistence.NoResultException;
 import org.slf4j.Logger;

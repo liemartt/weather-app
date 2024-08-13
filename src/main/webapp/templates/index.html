@@ -18,18 +18,19 @@
     </div>
 
     <div th:if="${error==null}">
+
         <div class="container">
             <div class="row">
-                <div th:each="weather : ${weatherList}" class="col-md-4 mb-4">
+                <div th:each="response : ${weatherList}" class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${weather.name}">Location Name</h5>
+                            <h5 class="card-title" th:text="${response.weather.name}">Location Name</h5>
                             <p class="card-text">
-                                <strong>Latitude:</strong> <span th:text="${weather.coord.lat}">0.00</span><br>
-                                <strong>Longitude:</strong> <span th:text="${weather.coord.lon}">0.00</span>
-                                <strong>Temp:</strong> <span th:text="${weather.main.temp}">0.00</span><br>
-                                <strong>Wind:</strong> <span th:text="${weather.wind.speed}">0.00</span>
-                                <strong>Country:</strong> <span th:text="${weather.sys.country}">0.00</span><br>
+                                <strong>Latitude:</strong> <span th:text="${response.weather.coord.latitude}">0.00</span><br>
+                                <strong>Longitude:</strong> <span th:text="${response.weather.coord.longitude}">0.00</span>
+                                <strong>Temp:</strong> <span th:text="${response.weather.main.temp}">0.00</span><br>
+                                <strong>Wind:</strong> <span th:text="${response.weather.wind.speed}">0.00</span>
+                                <strong>Country:</strong> <span th:text="${response.weather.sys.country}">0.00</span><br>
                             </p>
                         </div>
                     </div>

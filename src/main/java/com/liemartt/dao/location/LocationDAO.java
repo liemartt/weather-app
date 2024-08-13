@@ -1,4 +1,4 @@
-package com.liemartt.dao;
+package com.liemartt.dao.location;
 
 import com.liemartt.entity.Location;
 

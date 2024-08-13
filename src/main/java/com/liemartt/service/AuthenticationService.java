@@ -1,7 +1,7 @@
 package com.liemartt.service;
 
-import com.liemartt.dao.SessionDAO;
-import com.liemartt.dao.SessionDAOImpl;
+import com.liemartt.dao.session.SessionDAO;
+import com.liemartt.dao.session.SessionDAOImpl;
 import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.liemartt.service;
 
 import com.liemartt.TestConfig;
-import com.liemartt.dao.SessionDAO;
-import com.liemartt.dao.SessionDAOImpl;
+import com.liemartt.dao.session.SessionDAO;
+import com.liemartt.dao.session.SessionDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.entity.User;
 import org.hibernate.Session;

@@ -1,6 +1,6 @@
 package com.liemartt.service;
 
-import com.liemartt.dto.WeatherResponseDto;
+import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
 import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
@@ -50,9 +50,9 @@ public class WeatherApiServiceSearchWeatherTest {
                 .thenReturn(200);
         
         Location location = new Location(BigDecimal.valueOf(37.6175), BigDecimal.valueOf(55.7504), "Moscow");
-        WeatherResponseDto weatherResponseDto = weatherApiService.searchWeatherByLocation(location);
-        Assertions.assertEquals(weatherResponseDto.getName(), "Moscow");
-        Assertions.assertEquals(weatherResponseDto.getMain()
+        WeatherApiResponseDto weatherApiResponseDto = weatherApiService.searchWeatherByLocation(location);
+        Assertions.assertEquals(weatherApiResponseDto.getName(), "Moscow");
+        Assertions.assertEquals(weatherApiResponseDto.getMain()
                 .getTemp(), BigDecimal.valueOf(17.75));
     }
     

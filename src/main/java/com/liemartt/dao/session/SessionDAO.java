@@ -1,4 +1,4 @@
-package com.liemartt.dao;
+package com.liemartt.dao.session;
 
 import com.liemartt.entity.Session;
 

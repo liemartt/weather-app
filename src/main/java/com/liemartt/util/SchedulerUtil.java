@@ -1,7 +1,7 @@
 package com.liemartt.util;
 
-import com.liemartt.dao.SessionDAO;
-import com.liemartt.dao.SessionDAOImpl;
+import com.liemartt.dao.session.SessionDAO;
+import com.liemartt.dao.session.SessionDAOImpl;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

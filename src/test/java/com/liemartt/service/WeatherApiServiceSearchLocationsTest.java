@@ -1,6 +1,6 @@
 package com.liemartt.service;
 
-import com.liemartt.dto.LocationResponseDto;
+import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.exception.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
@@ -48,7 +48,7 @@ class WeatherApiServiceSearchLocationsTest {
         Mockito.when(mockResponse.body()).thenReturn(VALID_LOCATION_RESPONSE_JSON);
         Mockito.when(mockResponse.statusCode()).thenReturn(200);
         
-        List<LocationResponseDto> locations = weatherApiService.searchLocationsByName("Moscow");
+        List<LocationApiResponseDto> locations = weatherApiService.searchLocationsByName("Moscow");
         
         Assertions.assertFalse(locations.isEmpty());
         Assertions.assertEquals("Moscow", locations.get(0).getName());

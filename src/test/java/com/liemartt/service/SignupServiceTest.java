@@ -1,8 +1,8 @@
 package com.liemartt.service;
 
 import com.liemartt.TestConfig;
-import com.liemartt.dao.UserDAO;
-import com.liemartt.dao.UserDAOImpl;
+import com.liemartt.dao.user.UserDAO;
+import com.liemartt.dao.user.UserDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.exception.UsernameExistsException;
 import org.hibernate.Session;

@@ -1,11 +1,11 @@
-package com.liemartt.dto;
+package com.liemartt.dto.location;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class LocationResponseDto {
+public class LocationApiResponseDto {
     private String name;
     private BigDecimal lat;
     private BigDecimal lon;
