@@ -18,8 +18,6 @@ public class LocationService {
     private LocationService() {
         locationDAO = new LocationDAOImpl();
     }
-
-//    public void saveLocation(SaveLocationRequestDto dto)
     
     
     public Location getLocationFromJson(String json) {

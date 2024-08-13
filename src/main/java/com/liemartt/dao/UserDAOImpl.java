@@ -37,19 +37,4 @@ public class UserDAOImpl implements UserDAO {
             throw new UserNotFoundException();
         }
     }
-    
-    @Override
-    public Optional<User> findById(Long id) throws UserNotFoundException {
-        try (Session session = HibernateUtil.getSession()) {
-            session.beginTransaction();
-            User user = session.createSelectionQuery("FROM User where id=:id", User.class)
-                    .setParameter("username", id)
-                    .getSingleResult();
-            session.getTransaction()
-                    .commit();
-            return Optional.ofNullable(user);
-        } catch (NoResultException e) {
-            throw new UserNotFoundException();
-        }
-    }
 }
