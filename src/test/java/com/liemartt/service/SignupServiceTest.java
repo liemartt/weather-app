@@ -4,7 +4,6 @@ import com.liemartt.TestConfig;
 import com.liemartt.dao.UserDAO;
 import com.liemartt.dao.UserDAOImpl;
 import com.liemartt.dto.UserDto;
-import com.liemartt.entity.User;
 import com.liemartt.exception.UsernameAlreadyExistsException;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
@@ -28,26 +27,31 @@ public class SignupServiceTest {
     static void clearDb() {
         Session session = TestConfig.getSession();
         session.beginTransaction();
-        session.createMutationQuery("DELETE FROM User").executeUpdate();
-        session.getTransaction().commit();
+        session.createMutationQuery("DELETE FROM User")
+                .executeUpdate();
+        session.getTransaction()
+                .commit();
         session.close();
     }
     
     @Test
     void signup_uniqueUsername_successfulSignup() {
-        User user = new User("User", "password");
+        UserDto userDto = new UserDto("unique user", "password");
         
-        signupService.signupNewUser(new UserDto(user.getUsername(), user.getPassword()));
+        signupService.signupNewUser(userDto);
         
-        Assertions.assertNotNull(userDAO.getUserByUsername("Artem").get());
+        Assertions.assertNotNull(userDAO.getUserByUsername(userDto.getUsername())
+                .get());
     }
     
     @Test
-        void signup_nonUniqueUsername_failureSignup() {
-        User user = new User("User", "password2");
+    void signup_nonUniqueUsername_failureSignup() {
+        UserDto userDto = new UserDto("non unique user", "password");
+        
+        signupService.signupNewUser(userDto);
         
         Assertions.assertThrows(
                 UsernameAlreadyExistsException.class,
-                () -> signupService.signupNewUser(new UserDto(user.getUsername(), user.getPassword())));
+                () -> signupService.signupNewUser(userDto));
     }
 }
