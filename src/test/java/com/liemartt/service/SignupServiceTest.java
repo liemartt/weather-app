@@ -1,11 +1,11 @@
-package com.liemartt;
+package com.liemartt.service;
 
+import com.liemartt.TestConfig;
 import com.liemartt.dao.UserDAO;
 import com.liemartt.dao.UserDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.entity.User;
 import com.liemartt.exception.UsernameAlreadyExistsException;
-import com.liemartt.service.SignupService;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

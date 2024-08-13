@@ -1,5 +1,6 @@
-package com.liemartt;
+package com.liemartt.service;
 
+import com.liemartt.TestConfig;
 import com.liemartt.dao.SessionDAO;
 import com.liemartt.dao.SessionDAOImpl;
 import com.liemartt.dao.UserDAO;
@@ -8,8 +9,6 @@ import com.liemartt.dto.UserDto;
 import com.liemartt.entity.User;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
-import com.liemartt.service.LoginService;
-import com.liemartt.service.SignupService;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

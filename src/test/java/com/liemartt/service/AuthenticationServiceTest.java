@@ -1,12 +1,10 @@
-package com.liemartt;
+package com.liemartt.service;
 
+import com.liemartt.TestConfig;
 import com.liemartt.dao.SessionDAO;
 import com.liemartt.dao.SessionDAOImpl;
 import com.liemartt.dto.UserDto;
 import com.liemartt.entity.User;
-import com.liemartt.service.AuthenticationService;
-import com.liemartt.service.LoginService;
-import com.liemartt.service.SignupService;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
