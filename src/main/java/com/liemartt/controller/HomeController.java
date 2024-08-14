@@ -65,7 +65,7 @@ public class HomeController extends HttpServlet {
         WebContext context = ThymeleafUtil.getWebContext(req, resp, req.getServletContext());
         String sessionId = Arrays.stream(req.getCookies()).filter(cookie -> cookie.getName().equals("sessionId"))
                 .findFirst().get().getValue();
-        String locationId = req.getParameter("location_id");
+        String locationId = req.getParameter("location-id");
         
         User user = authenticationService.getAuthorizedUser(sessionId).get();
         
@@ -75,6 +75,7 @@ public class HomeController extends HttpServlet {
     }
     private WeatherWebDto createWeatherWebDto(Location location){
         WeatherApiResponseDto response = weatherApiService.searchWeatherByLocation(location);
+        response.setName(location.getName());
         return new WeatherWebDto(location.getId(), response);
     }
 }

@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class SearchLocationController extends HttpServlet {
         
         try {
             List<LocationApiResponseDto> locations = weatherApiService.searchLocationsByName(locationName);
+            //TODO set user location to unfollow
             context.setVariable("locations", locations);
         } catch (LocationNotFoundException | WeatherApiException e) {
             context.setVariable("message", e.getMessage());
@@ -51,8 +53,10 @@ public class SearchLocationController extends HttpServlet {
         
         User user = authenticationService.getAuthorizedUser(sessionId).get();
         
-        String locationJson = req.getParameter("locationJson");
-        Location location = locationService.getLocationFromJson(locationJson);
+        String name = req.getParameter("name");
+        String lat = req.getParameter("lat");
+        String lon = req.getParameter("lon");
+        Location location = new Location(new BigDecimal(lon), new BigDecimal(lat), name);
         
         SaveLocationRequestDto dto = new SaveLocationRequestDto(user, location);
         try {

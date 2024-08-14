@@ -1,15 +1,30 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <title>Weather app</title>
 </head>
+
 <body>
     <header class="container mt-2">
-        <h1>Weather app</h1>
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h1>Weather app</h1>
+            <div th:if="${user==null}">
+                <a href="/signup" class="btn btn-primary me-3">Sign Up</a>
+                <a href="/login" class="btn btn-secondary">Login</a>
+            </div>
+            <form action="/logout" method="post" th:if="${user!=null}" class="row align-items-center ">
+            <h5 th:text = "${user.username}">liemartt</h5>
+                <button type="submit" class="btn btn-secondary">Logout</button>
+            </form>
+            
+        </div>
     </header>
     <div class="container mt-3">
         <div th:if="${error!=null}">
@@ -19,19 +34,84 @@
 
     <div th:if="${error==null}">
 
+        <form method="get" action="/search" class="container mb-4">
+            <label for="location" class="h4 mb-2">Search location</label>
+            <div class="row justify-content-between">
+                <div class="col-10">
+                    <input type="search" name="location" id="location" class="form-control" placeholder="Moscow e.g."
+                        required>
+                </div>
+                <button type="submit" class="btn btn-primary col-2">Search</button>
+            </div>
+        </form>
+
         <div class="container">
             <div class="row">
-                <div th:each="response : ${weatherList}" class="col-md-4 mb-4">
+                <div th:each="response : ${weatherList}" class="col-3 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${response.weather.name}">Location Name</h5>
-                            <p class="card-text">
-                                <strong>Latitude:</strong> <span th:text="${response.weather.coord.latitude}">0.00</span><br>
-                                <strong>Longitude:</strong> <span th:text="${response.weather.coord.longitude}">0.00</span>
-                                <strong>Temp:</strong> <span th:text="${response.weather.main.temp}">0.00</span><br>
-                                <strong>Wind:</strong> <span th:text="${response.weather.wind.speed}">0.00</span>
-                                <strong>Country:</strong> <span th:text="${response.weather.sys.country}">0.00</span><br>
-                            </p>
+                            <!-- City Name and Country -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="card-title mb-0" th:text="${response.weather.name}">Moscow</h5>
+                                    <h6 class="text-muted mb-0" th:text="${response.weather.sys.country}">RU</h6>
+                                </div>
+                                <div>
+                                    <!-- Weather Icon -->
+                                    <img th:src="@{'https://openweathermap.org/img/wn/' + ${response.weather.weather[0].icon} + '@2x.png'}"
+                                        alt="Weather Icon" class="img">
+                                </div>
+                            </div>
+
+                            <!-- Weather Description -->
+                            <p class="text-start text-capitalize mb-3 lead"
+                                th:text="${response.weather.weather[0].description}">Cloudy</p>
+
+                            <!-- Temperature Info -->
+                            <div class="mb-3">
+                                <p class="card-text">
+                                    <span class="d-block">
+                                        <i class="bi bi-thermometer-half"></i> Temperature:
+                                        <span th:text="${response.weather.main.temp}">0.00</span>°C
+                                    </span>
+                                    <span class="d-block">
+                                        <i class="bi bi-thermometer-sun"></i> Feels Like:
+                                        <span th:text="${response.weather.main.feelsLike}">0.00</span>°C
+                                    </span>
+                                </p>
+                                <p class="card-text">
+                                    <span class="d-block">
+                                        <i class="bi bi-thermometer-low"></i> Min:
+                                        <span th:text="${response.weather.main.minTemp}">0.00</span>°C
+                                    </span>
+                                    <span class="d-block">
+                                        <i class="bi bi-thermometer-high"></i> Max:
+                                        <span th:text="${response.weather.main.maxTemp}">0.00</span>°C
+                                    </span>
+                                </p>
+                            </div>
+
+                            <!-- Wind Info -->
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">
+                                    <span class="d-block">
+                                        <i class="bi bi-wind"></i> Wind Speed:
+                                        <span th:text="${response.weather.wind.speed}">0.00</span> m/s
+                                    </span>
+                                    <span class="d-block">
+                                        <i class="bi bi-wind"></i> Gusts:
+                                        <span th:text="${response.weather.wind.gust}">0.00</span> m/s
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <form method="post" action="/">
+                                    <input type="hidden" name="location-id" th:value="${response.locationId}">
+                                    <button type="submit" class="btn btn" onmouseenter="setGreyColor(this)" onmouseleave="setRedColor(this)"><svg style="fill:red" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                                      </svg></button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,8 +119,18 @@
         </div>
     </div>
 
+
+    <script>
+        function setRedColor(button) {
+            button.querySelector('svg').style.fill = 'red';
+        }
+        function setGreyColor(button) {
+            button.querySelector('svg').style.fill = 'grey';
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
