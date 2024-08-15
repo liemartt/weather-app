@@ -6,7 +6,7 @@ import com.liemartt.dto.UserDto;
 import com.liemartt.entity.Session;
 import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UserNotFoundException;
-import com.liemartt.service.LoginService;
+import com.liemartt.service.AuthenticationService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
-    private final LoginService loginService = LoginService.getINSTANCE();
+    private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override
@@ -36,7 +36,7 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
         try {
-            Session session = loginService.loginUser(userDto);
+            Session session = authenticationService.loginUser(userDto);
             resp.addCookie(new Cookie("sessionId", session.getId().toString()));
             resp.sendRedirect(req.getContextPath() + "/");
         } catch (UserNotFoundException | IncorrectPasswordException e) {

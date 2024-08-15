@@ -2,7 +2,7 @@ package com.liemartt.controller;
 
 import com.liemartt.dto.UserDto;
 import com.liemartt.exception.UsernameExistsException;
-import com.liemartt.service.SignupService;
+import com.liemartt.service.AuthenticationService;
 import com.liemartt.util.ThymeleafUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/signup")
 public class SignupController extends HttpServlet {
-    private final SignupService signupService = SignupService.getINSTANCE();
+    private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class SignupController extends HttpServlet {
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
         try {
-            signupService.signupNewUser(userDto);
+            authenticationService.signupNewUser(userDto);
         } catch (UsernameExistsException e) {
             context.setVariable("error", e.getMessage());//TODO responseEntity?
             ThymeleafUtil.process(context, "signup.html", resp);
