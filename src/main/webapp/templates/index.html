@@ -35,19 +35,18 @@
     <div th:if="${error==null}">
 
         <form method="get" action="/search" class="container mb-4">
-            <label for="location" class="h4 mb-2">Search location</label>
-            <div class="row justify-content-between">
+            <div class="row justify-content-center">
                 <div class="col-10">
                     <input type="search" name="location" id="location" class="form-control" placeholder="Moscow e.g."
                         required>
                 </div>
-                <button type="submit" class="btn btn-primary col-2">Search</button>
+                <button type="submit" class="btn btn-primary col-2"><i class="bi bi-search"></i></button>
             </div>
         </form>
 
         <div class="container">
-            <div class="row">
-                <div th:each="response : ${weatherList}" class="col-3 mb-4">
+            <div class="row justify-content-center">
+                <div th:each="response : ${weatherList}" class="col-auto mb-4">
                     <div class="card">
                         <div class="card-body">
                             <!-- City Name and Country -->
