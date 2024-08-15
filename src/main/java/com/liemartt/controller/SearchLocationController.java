@@ -4,10 +4,7 @@ import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.dto.location.SaveLocationRequestDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
-import com.liemartt.exception.LocationExistsException;
-import com.liemartt.exception.LocationNotFoundException;
-import com.liemartt.exception.UserNotAuthorizedException;
-import com.liemartt.exception.WeatherApiException;
+import com.liemartt.exception.*;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.service.LocationService;
 import com.liemartt.service.WeatherApiService;
@@ -30,6 +27,9 @@ public class SearchLocationController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, WeatherApiException, LocationNotFoundException {
         String locationName = req.getParameter("location");
+        if (locationName == null || locationName.isEmpty()) {
+            throw new InvalidLocationNameException();
+        }
         
         List<LocationApiResponseDto> locations = weatherApiService.searchLocationsByName(locationName);
         
@@ -38,7 +38,7 @@ public class SearchLocationController extends BaseController {
     }
     
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException, LocationExistsException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, LocationExistsException {
         Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId");
         
         User user = authenticationService.getAuthorizedUser(sessionCookie.getValue())
@@ -47,6 +47,15 @@ public class SearchLocationController extends BaseController {
         String name = req.getParameter("name");
         String lat = req.getParameter("lat");
         String lon = req.getParameter("lon");
+        
+        if (name == null || lat == null || lon == null
+                || name.isEmpty() || name.isBlank()
+                || lat.isBlank() || lat.isEmpty()
+                || lon.isBlank() || lon.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/");
+            return;
+        }
+        
         Location location = new Location(new BigDecimal(lon), new BigDecimal(lat), name);
         
         SaveLocationRequestDto dto = new SaveLocationRequestDto(user, location);

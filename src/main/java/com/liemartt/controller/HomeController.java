@@ -50,6 +50,10 @@ public class HomeController extends BaseController {
         
         String sessionId = sessionCookie.getValue();
         String locationId = req.getParameter("location-id");
+        if (locationId == null || locationId.isBlank() || locationId.isEmpty()) {
+            this.doGet(req, resp);
+            return;
+        }
         
         User authorizedUser = authenticationService
                 .getAuthorizedUser(sessionId)

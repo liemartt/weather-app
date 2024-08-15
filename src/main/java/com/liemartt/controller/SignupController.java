@@ -1,6 +1,7 @@
 package com.liemartt.controller;
 
 import com.liemartt.dto.UserDto;
+import com.liemartt.exception.IncorrectPasswordException;
 import com.liemartt.exception.UsernameExistsException;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.util.ThymeleafUtil;
@@ -26,6 +27,12 @@ public class SignupController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, UsernameExistsException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        
+        if (username == null || password == null || username.isEmpty() || username.isBlank() || password.isEmpty() || password.isBlank()) {
+            this.doGet(req, resp);
+            return;
+        }
+        
         UserDto userDto = new UserDto(username, password);
         
         authenticationService.signupNewUser(userDto);
