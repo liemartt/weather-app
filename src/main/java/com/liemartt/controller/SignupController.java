@@ -14,28 +14,22 @@ import org.thymeleaf.context.WebContext;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/signup")
-public class SignupController extends HttpServlet {
+public class SignupController extends BaseController {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ThymeleafUtil.process(context, "signup.html", resp);
     }
     
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, UsernameExistsException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto(username, password);
-        try {
-            authenticationService.signupNewUser(userDto);
-        } catch (UsernameExistsException e) {
-            context.setVariable("error", e.getMessage());//TODO responseEntity?
-            ThymeleafUtil.process(context, "signup.html", resp);
-            return;
-        }
+        
+        authenticationService.signupNewUser(userDto);
+        
         resp.sendRedirect(req.getContextPath() + "/login");
     }
 }

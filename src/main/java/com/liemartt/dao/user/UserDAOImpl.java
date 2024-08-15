@@ -32,9 +32,9 @@ public class UserDAOImpl implements UserDAO {
                     .getSingleResult();
             session.getTransaction()
                     .commit();
-            return Optional.ofNullable(user);
+            return Optional.of(user);
         } catch (NoResultException e) {
-            throw new UserNotFoundException();
+            return Optional.empty();
         }
     }
 }

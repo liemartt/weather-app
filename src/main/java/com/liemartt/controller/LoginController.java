@@ -19,30 +19,25 @@ import org.thymeleaf.context.WebContext;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/login")
-public class LoginController extends HttpServlet {
+public class LoginController extends BaseController {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
-    private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ThymeleafUtil.process(context, "login.html", resp);
     }
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        WebContext context = ThymeleafUtil.getWebContext(req, resp, getServletContext());//TODO base servlet
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        
         UserDto userDto = new UserDto(username, password);
-        try {
-            Session session = authenticationService.loginUser(userDto);
-            resp.addCookie(new Cookie("sessionId", session.getId().toString()));
-            resp.sendRedirect(req.getContextPath() + "/");
-        } catch (UserNotFoundException | IncorrectPasswordException e) {
-            context.setVariable("error", e.getMessage());//TODO responseEntity?
-            ThymeleafUtil.process(context, "login.html", resp);
-        }
+        
+        Session session = authenticationService.loginUser(userDto);
+        resp.addCookie(new Cookie("sessionId", session.getId().toString()));
+        resp.sendRedirect(req.getContextPath() + "/");
+        
     }
     
 }

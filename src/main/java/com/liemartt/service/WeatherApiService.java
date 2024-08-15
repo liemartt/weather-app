@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
+import com.liemartt.exception.LocationApiException;
 import com.liemartt.exception.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
@@ -51,7 +52,7 @@ public class WeatherApiService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         
         if (response.statusCode() != 200) {
-            throw new WeatherApiException("Error fetching weather");
+            throw new LocationApiException();
         }
         
         List<LocationApiResponseDto> locationsFromJson = getLocationsFromJson(response.body());

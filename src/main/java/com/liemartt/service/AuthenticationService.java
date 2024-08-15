@@ -39,7 +39,7 @@ public class AuthenticationService {
     }
     
     
-    public boolean isSessionValid(String sessionId) {
+    public boolean isSessionActive(String sessionId) {
         try {
             UUID sessionUUID = UUID.fromString(sessionId);
             Optional<Session> session = sessionDAO.findById(sessionUUID);
@@ -51,13 +51,15 @@ public class AuthenticationService {
     }
     
     public Session loginUser(UserDto userDto) throws UserNotFoundException, IncorrectPasswordException {
-        Optional<User> userOptional = userDAO.findByUsername(userDto.getUsername());
-        if (!BCrypt.checkpw(userDto.getPassword(), userOptional.get().getPassword())) {
-            throw new IncorrectPasswordException();
+        User user = userDAO
+                .findByUsername(userDto.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Not found"));
+        
+        if (!BCrypt.checkpw(userDto.getPassword(), user.getPassword())) {
+            throw new IncorrectPasswordException("Not found");
         }
         
-        Session session = new Session(UUID.randomUUID(), userOptional.get(), LocalDateTime.now()
-                .plusMinutes(SESSION_LIFETIME_MINUTES));
+        Session session = new Session(UUID.randomUUID(), user, LocalDateTime.now().plusMinutes(SESSION_LIFETIME_MINUTES));
         sessionDAO.save(session);
         
         return session;

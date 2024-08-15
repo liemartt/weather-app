@@ -27,12 +27,12 @@
         </div>
     </header>
     <div class="container mt-3">
-        <div th:if="${error!=null}">
-            <div class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${message!=null}">
+            <div class="alert alert-danger" th:text="${message}"></div>
         </div>
     </div>
 
-    <div th:if="${error==null}">
+    <div th:if="${message==null}">
 
         <form method="get" action="/search" class="container mb-4">
             <div class="row justify-content-center">

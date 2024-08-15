@@ -46,7 +46,7 @@ public class AuthenticationServiceTest {
         com.liemartt.entity.Session session = authenticationService.loginUser(userDto);
         String sessionId = session.getId().toString();
         
-        Assertions.assertTrue(authenticationService.isSessionValid(sessionId));
+        Assertions.assertTrue(authenticationService.isSessionActive(sessionId));
         Assertions.assertEquals(user, authenticationService.getAuthorizedUser(sessionId).get());
     }
     
@@ -60,12 +60,12 @@ public class AuthenticationServiceTest {
         
         sessionDAO.delete(session.getId());
         
-        Assertions.assertFalse(authenticationService.isSessionValid(sessionId));
+        Assertions.assertFalse(authenticationService.isSessionActive(sessionId));
     }
     
     @Test
     void authenticate_userWithWrongSessionId_failureAuth() {
-        Assertions.assertFalse(authenticationService.isSessionValid("Wrong session id"));
+        Assertions.assertFalse(authenticationService.isSessionActive("Wrong session id"));
         Assertions.assertEquals(Optional.empty(), authenticationService.getAuthorizedUser("Wrong session id"));
     }
     

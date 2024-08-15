@@ -55,7 +55,7 @@ public class SessionDAOImpl implements SessionDAO {
                     .getSingleResult();
             session.getTransaction().commit();
             return Optional.ofNullable(userSession);
-        } catch (NoResultException | IllegalArgumentException e) {
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }

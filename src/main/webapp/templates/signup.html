@@ -10,12 +10,16 @@
         function validatePassword() {
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirm_password").value;
-
+            const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
             if (password !== confirmPassword) {
                 alert("Passwords do not match. Please try again.");
-                return false; // Prevents form submission
+                return false;
             }
-            return true; // Allows form submission
+            if(!regex.test(password)){
+                alert("Password must contain at least 8 characters, including at least one digit (0-9) and one letter (A-Z).");
+                return false;
+            }
+            return true;
         }
     </script>
 </head>
@@ -24,8 +28,8 @@
     <h1><b>Weather app</b></h1>
 </header>
 <div class="container mt-3">
-    <div th:if="${error != null}" class="alert alert-danger" role="alert">
-        <span th:text="${error}"></span>
+    <div th:if="${message != null}" class="alert alert-danger" role="alert">
+        <span th:text="${message}"></span>
     </div>
 </div>
 <form onsubmit="return validatePassword()" class="container" method="post">
@@ -50,7 +54,6 @@
         <button type="submit" class="btn btn-primary col-7 mb-3">Submit</button>
         <a href = "/" class="btn btn-primary col-7">Go back</a>
         
-<!--        <h2 class = "row justify-content-center mt-2" th:text="${error}==null?'':${error}" style="color: red"></h2>-->
     </div>
 
 </form>

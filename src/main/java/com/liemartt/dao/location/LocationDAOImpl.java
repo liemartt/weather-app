@@ -16,7 +16,7 @@ public class LocationDAOImpl implements LocationDAO {
             session.persist(location);
             session.getTransaction().commit();
         } catch (ConstraintViolationException e) {
-            throw new LocationExistsException("Location exists");
+            throw new LocationExistsException("Location "+location+" exists");
         } catch (Exception e) {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

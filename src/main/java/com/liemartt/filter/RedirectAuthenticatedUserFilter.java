@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/logout", "/search"})
-public class NonAuthenticatedUserRedirectFilter implements Filter {
+@WebFilter(urlPatterns = {"/login", "/signup"})
+public class RedirectAuthenticatedUserFilter implements Filter {
     private final AuthenticationService authenticationService = AuthenticationService.getINSTANCE();
     
     @Override
@@ -24,16 +24,20 @@ public class NonAuthenticatedUserRedirectFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
+        if (req.getCookies() == null) {
+            chain.doFilter(req, resp);
+            return;
+        }
         Optional<Cookie> sessionCookie = Arrays.stream(req.getCookies())
                 .filter(cookie -> cookie.getName().equals("sessionId"))
                 .findFirst();
         
         Optional<String> sessionId = sessionCookie.map(Cookie::getValue);
         if (sessionId.isEmpty()) {
-            resp.sendRedirect(req.getContextPath() + "/");
+            chain.doFilter(request, response);
             return;
         }
-        if (!authenticationService.isSessionValid(sessionId.get())) {
+        if (authenticationService.isSessionActive(sessionId.get())) {
             resp.sendRedirect(req.getContextPath() + "/");
         } else {
             chain.doFilter(request, response);

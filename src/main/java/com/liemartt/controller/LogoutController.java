@@ -2,6 +2,7 @@ package com.liemartt.controller;
 
 import com.liemartt.dao.session.SessionDAO;
 import com.liemartt.dao.session.SessionDAOImpl;
+import com.liemartt.exception.UserNotAuthorizedException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -15,22 +16,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = "/logout")
-public class LogoutController extends HttpServlet {
+public class LogoutController extends BaseController {
     private final SessionDAO sessionDAO = new SessionDAOImpl();
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Cookie> sessionCookie = Arrays.stream(req.getCookies())
-                .filter(cookie -> cookie.getName().equals("sessionId"))
-                .findFirst();
-        String sessionId = sessionCookie.get().getValue();
+        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId")
+                .orElseThrow(() -> new UserNotAuthorizedException("Please log in"));
         
-        UUID sessionUUID = UUID.fromString(sessionId);
+        UUID sessionUUID = UUID.fromString(sessionCookie.getValue());
         sessionDAO.delete(sessionUUID);
         
-        sessionCookie.get().setMaxAge(0);
-        resp.addCookie(sessionCookie.get());
-        
+        sessionCookie.setMaxAge(0);
+        resp.addCookie(sessionCookie);
         resp.sendRedirect(req.getContextPath() + "/");
     }
 }
