@@ -11,7 +11,6 @@ import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 
 
 public class BaseController extends HttpServlet {
@@ -22,7 +21,7 @@ public class BaseController extends HttpServlet {
         context = ThymeleafUtil.getWebContext(req, resp, getServletContext());
         try {
             super.service(req, resp);
-        } catch (UserNotAuthorizedException | WeatherApiException e) {
+        } catch (UserNotAuthorizedException | WeatherApiException | DBException e) {
             context.setVariable("message", e.getMessage());
             ThymeleafUtil.process(context, "index.html", resp);
         } catch (UserNotFoundException | IncorrectPasswordException e) {
@@ -38,12 +37,12 @@ public class BaseController extends HttpServlet {
         }
     }
     
-    protected Optional<Cookie> findCookieByName(Cookie[] cookies, String name) {
+    protected Cookie findCookieByName(Cookie[] cookies, String name) {
         if (cookies == null) {
-            return Optional.empty();
+            throw new UserNotAuthorizedException();
         }
         return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(name))
-                .findFirst();
+                .findFirst().orElseThrow(UserNotAuthorizedException::new);
     }
 }

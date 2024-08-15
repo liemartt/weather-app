@@ -4,14 +4,13 @@ import com.liemartt.dto.WeatherWebDto;
 import com.liemartt.dto.location.DeleteLocationRequestDto;
 import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
-import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
 import com.liemartt.exception.UserNotAuthorizedException;
+import com.liemartt.exception.WeatherApiException;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.service.LocationService;
 import com.liemartt.service.WeatherApiService;
 import com.liemartt.util.ThymeleafUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/")
@@ -29,9 +27,8 @@ public class HomeController extends BaseController {
     private final LocationService locationService = LocationService.getINSTANCE();
     
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId")
-                .orElseThrow(UserNotAuthorizedException::new);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, UserNotAuthorizedException, WeatherApiException {
+        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId");
         String sessionId = sessionCookie.getValue();
         
         User authorizedUser = authenticationService
@@ -48,9 +45,8 @@ public class HomeController extends BaseController {
     }
     
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId")
-                .orElseThrow(UserNotAuthorizedException::new);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, UserNotAuthorizedException {
+        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId");
         
         String sessionId = sessionCookie.getValue();
         String locationId = req.getParameter("location-id");

@@ -12,17 +12,13 @@ import com.liemartt.service.AuthenticationService;
 import com.liemartt.service.LocationService;
 import com.liemartt.service.WeatherApiService;
 import com.liemartt.util.ThymeleafUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/search")
@@ -43,8 +39,7 @@ public class SearchLocationController extends BaseController {
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException, LocationExistsException {
-        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId")
-                .orElseThrow(UserNotAuthorizedException::new);
+        Cookie sessionCookie = findCookieByName(req.getCookies(), "sessionId");
         
         User user = authenticationService.getAuthorizedUser(sessionCookie.getValue())
                 .orElseThrow(UserNotAuthorizedException::new);

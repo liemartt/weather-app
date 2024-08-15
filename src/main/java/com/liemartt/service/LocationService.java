@@ -1,17 +1,13 @@
 package com.liemartt.service;
 
-import com.google.gson.Gson;
 import com.liemartt.dao.location.LocationDAO;
 import com.liemartt.dao.location.LocationDAOImpl;
 import com.liemartt.dto.location.DeleteLocationRequestDto;
-import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.dto.location.SaveLocationRequestDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
 import com.liemartt.exception.LocationExistsException;
 import lombok.Getter;
-
-import java.util.List;
 import java.util.Optional;
 
 public class LocationService {
@@ -23,12 +19,6 @@ public class LocationService {
         locationDAO = new LocationDAOImpl();
     }
     
-    
-    public Location getLocationFromJson(String json) {
-        Gson gson = new Gson();
-        LocationApiResponseDto dto = gson.fromJson(json, LocationApiResponseDto.class);
-        return new Location(dto.getLon(), dto.getLat(), dto.getName());
-    }
     
     public void saveLocation(SaveLocationRequestDto dto) throws LocationExistsException {
         Location location = dto.getLocation();

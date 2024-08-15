@@ -1,8 +1,8 @@
 package com.liemartt.service;
 
 import com.liemartt.dto.location.LocationApiResponseDto;
+import com.liemartt.exception.LocationApiException;
 import com.liemartt.exception.LocationNotFoundException;
-import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 @ExtendWith(MockitoExtension.class)
 class WeatherApiServiceSearchLocationsTest {
     private static WeatherApiService weatherApiService;
-    private static HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+    private static final HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
     
     private final static String VALID_LOCATION_RESPONSE_JSON =
             """
@@ -51,7 +51,7 @@ class WeatherApiServiceSearchLocationsTest {
         List<LocationApiResponseDto> locations = weatherApiService.searchLocationsByName("Moscow");
         
         Assertions.assertFalse(locations.isEmpty());
-        Assertions.assertEquals("Moscow", locations.get(0).getName());
+        Assertions.assertEquals("Moscow", locations.getFirst().getName());
     }
     
     @Test
@@ -67,7 +67,7 @@ class WeatherApiServiceSearchLocationsTest {
         Mockito.when(mockResponse.body()).thenReturn(WEATHER_API_NOT_AVAILABLE_JSON_RESPONSE);
         Mockito.when(mockResponse.statusCode()).thenReturn(401);
         
-        Assertions.assertThrows(WeatherApiException.class, ()->weatherApiService.searchLocationsByName("Moscow"));
+        Assertions.assertThrows(LocationApiException.class, ()->weatherApiService.searchLocationsByName("Moscow"));
     }
     
 }

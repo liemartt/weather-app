@@ -21,7 +21,7 @@ public class LocationDAOImpl implements LocationDAO {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
-            throw new DBException("DB is unavailable");
+            throw new DBException();
         }
     }
     
@@ -36,7 +36,7 @@ public class LocationDAOImpl implements LocationDAO {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
-            throw new DBException("DB is unavailable");
+            throw new DBException();
         }
     }
     
