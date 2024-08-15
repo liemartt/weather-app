@@ -1,4 +1,4 @@
-package com.liemartt.exception;
+package com.liemartt.exception.location;
 
 public class LocationApiException extends RuntimeException{
     public LocationApiException() {

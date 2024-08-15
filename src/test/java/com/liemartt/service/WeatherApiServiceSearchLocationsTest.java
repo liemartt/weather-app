@@ -1,8 +1,8 @@
 package com.liemartt.service;
 
 import com.liemartt.dto.location.LocationApiResponseDto;
-import com.liemartt.exception.LocationApiException;
-import com.liemartt.exception.LocationNotFoundException;
+import com.liemartt.exception.location.LocationApiException;
+import com.liemartt.exception.location.LocationNotFoundException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,4 +1,4 @@
-package com.liemartt.exception;
+package com.liemartt.exception.user;
 
 public class UserNotAuthorizedException extends RuntimeException {
     public UserNotAuthorizedException() {

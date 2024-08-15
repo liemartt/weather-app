@@ -6,7 +6,7 @@ import com.liemartt.dto.location.DeleteLocationRequestDto;
 import com.liemartt.dto.location.SaveLocationRequestDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
-import com.liemartt.exception.LocationExistsException;
+import com.liemartt.exception.location.LocationExistsException;
 import lombok.Getter;
 import java.util.Optional;
 

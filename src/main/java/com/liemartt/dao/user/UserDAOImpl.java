@@ -2,8 +2,8 @@ package com.liemartt.dao.user;
 
 import com.liemartt.entity.User;
 import com.liemartt.exception.DBException;
-import com.liemartt.exception.UserNotFoundException;
-import com.liemartt.exception.UsernameExistsException;
+import com.liemartt.exception.user.UserNotFoundException;
+import com.liemartt.exception.user.UsernameExistsException;
 import com.liemartt.util.HibernateUtil;
 import jakarta.persistence.NoResultException;
 import org.hibernate.Session;

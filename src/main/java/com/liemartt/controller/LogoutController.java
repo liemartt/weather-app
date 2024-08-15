@@ -2,7 +2,7 @@ package com.liemartt.controller;
 
 import com.liemartt.dao.session.SessionDAO;
 import com.liemartt.dao.session.SessionDAOImpl;
-import com.liemartt.exception.UserNotAuthorizedException;
+import com.liemartt.exception.user.UserNotAuthorizedException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

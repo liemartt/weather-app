@@ -1,16 +1,12 @@
 package com.liemartt.controller;
 
 import com.liemartt.dto.UserDto;
-import com.liemartt.exception.IncorrectPasswordException;
-import com.liemartt.exception.UsernameExistsException;
+import com.liemartt.exception.user.UsernameExistsException;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.util.ThymeleafUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.thymeleaf.context.WebContext;
 
 import java.io.IOException;
 

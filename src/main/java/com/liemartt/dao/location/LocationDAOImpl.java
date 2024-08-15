@@ -2,7 +2,7 @@ package com.liemartt.dao.location;
 
 import com.liemartt.entity.Location;
 import com.liemartt.exception.DBException;
-import com.liemartt.exception.LocationExistsException;
+import com.liemartt.exception.location.LocationExistsException;
 import com.liemartt.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;

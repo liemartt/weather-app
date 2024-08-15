@@ -5,7 +5,7 @@ import com.liemartt.dto.location.DeleteLocationRequestDto;
 import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
 import com.liemartt.entity.User;
-import com.liemartt.exception.UserNotAuthorizedException;
+import com.liemartt.exception.user.UserNotAuthorizedException;
 import com.liemartt.exception.WeatherApiException;
 import com.liemartt.service.AuthenticationService;
 import com.liemartt.service.LocationService;

@@ -1,4 +1,4 @@
-package com.liemartt.exception;
+package com.liemartt.exception.location;
 
 public class LocationExistsException extends RuntimeException {
     public LocationExistsException() {

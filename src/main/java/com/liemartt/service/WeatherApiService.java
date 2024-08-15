@@ -5,8 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
-import com.liemartt.exception.LocationApiException;
-import com.liemartt.exception.LocationNotFoundException;
+import com.liemartt.exception.location.LocationApiException;
+import com.liemartt.exception.location.LocationNotFoundException;
 import com.liemartt.exception.WeatherApiException;
 import lombok.SneakyThrows;
 

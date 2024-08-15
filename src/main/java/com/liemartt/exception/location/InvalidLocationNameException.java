@@ -1,4 +1,4 @@
-package com.liemartt.exception;
+package com.liemartt.exception.location;
 
 public class InvalidLocationNameException extends RuntimeException{
     public InvalidLocationNameException() {

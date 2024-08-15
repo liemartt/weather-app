@@ -1,7 +1,7 @@
 package com.liemartt.dao.user;
 
 import com.liemartt.entity.User;
-import com.liemartt.exception.UsernameExistsException;
+import com.liemartt.exception.user.UsernameExistsException;
 
 import java.util.Optional;
 
