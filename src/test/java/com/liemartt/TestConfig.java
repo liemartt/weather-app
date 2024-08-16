@@ -4,6 +4,8 @@ import com.liemartt.entity.Location;
 import com.liemartt.entity.Session;
 import com.liemartt.entity.User;
 import lombok.SneakyThrows;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -17,7 +19,8 @@ public class TestConfig {
     public static Configuration configure() {
         Configuration configuration = new Configuration();
         Properties properties = new Properties();
-        properties.load(TestConfig.class.getResourceAsStream("/hibernate.properties"));
+
+        properties.load(TestConfig.class.getResourceAsStream("hibernate-test.properties"));
         
         configuration.setProperties(properties);
         configuration.addAnnotatedClass(User.class).addAnnotatedClass(Session.class).addAnnotatedClass(Location.class);
@@ -29,6 +32,11 @@ public class TestConfig {
     }
     
     private static SessionFactory buildSessionFactory() {
+        try{
+            cfg.buildSessionFactory();
+        }catch (HibernateException e){
+            e.printStackTrace();
+        }
         return cfg.buildSessionFactory();
     }
 }

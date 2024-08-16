@@ -1,5 +1,6 @@
 package com.liemartt.service;
 
+import com.liemartt.TestConfig;
 import com.liemartt.dto.location.LocationApiResponseDto;
 import com.liemartt.exception.location.LocationApiException;
 import com.liemartt.exception.location.LocationNotFoundException;
@@ -37,6 +38,8 @@ class WeatherApiServiceSearchLocationsTest {
     @BeforeAll
     @SneakyThrows
     static void setup() {
+        TestConfig.configure();
+        
         HttpClient client = Mockito.mock(HttpClient.class);
         Mockito.when(client.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()))).thenReturn(mockResponse);
         weatherApiService = new WeatherApiService(client);
