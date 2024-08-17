@@ -27,6 +27,6 @@ The app will be available at https://localhost:8082/
 - Database: Postgresql, Hibernate 
 - Other: Docker, Junit5, Mockito
 
-![main page](img/image1.jpg)
-![search page](img/image2.jpg)
-![sign up page](img/image3.jpg)
+![main page](img/image1.png)
+![search page](img/image2.png)
+![sign up page](img/image3.png)
