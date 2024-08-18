@@ -55,7 +55,7 @@ public class WeatherApiService {
             throw new LocationApiException();
         }
         
-        List<LocationApiResponseDto> locationsFromJson = getLocationsFromJson(response.body());
+        List<LocationApiResponseDto> locationsFromJson = mapJsonToLocationList(response.body());
         if (locationsFromJson.isEmpty()) {
             throw new LocationNotFoundException("Nothing found");
         }
@@ -70,10 +70,10 @@ public class WeatherApiService {
         if (response.statusCode() != 200) {
             throw new WeatherApiException("Error fetching weather");
         }
-        return getWeatherFromJson(response.body());
+        return mapJsonToWeather(response.body());
     }
     
-    public List<LocationApiResponseDto> getLocationsFromJson(String json) {
+    public List<LocationApiResponseDto> mapJsonToLocationList(String json) {
         Gson gson = new Gson();
         
         Type listType = new TypeToken<ArrayList<LocationApiResponseDto>>() {
@@ -81,7 +81,7 @@ public class WeatherApiService {
         return gson.fromJson(json, listType);
     }
     
-    public WeatherApiResponseDto getWeatherFromJson(String json) {
+    public WeatherApiResponseDto mapJsonToWeather(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, WeatherApiResponseDto.class);
     }

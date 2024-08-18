@@ -1,6 +1,6 @@
 package com.liemartt.controller;
 
-import com.liemartt.dto.WeatherWebDto;
+import com.liemartt.dto.WeatherResponse;
 import com.liemartt.dto.location.DeleteLocationRequestDto;
 import com.liemartt.dto.weather.WeatherApiResponseDto;
 import com.liemartt.entity.Location;
@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,11 +35,11 @@ public class HomeController extends BaseController {
                 .getAuthorizedUser(sessionId)
                 .orElseThrow(() -> new UserNotAuthorizedException("Session " + sessionId + " has expired, please log in"));
         
-        List<WeatherWebDto> weather =
+        List<WeatherResponse> weather =
                 authorizedUser.getLocations()
                         .stream()
                         .map(this::createWeatherWebDto)
-                        .sorted(Comparator.comparing(WeatherWebDto::getLocationId))
+                        .sorted(Comparator.comparing(WeatherResponse::getLocationId))
                         .toList();
         
         context.setVariable("user", authorizedUser);
@@ -68,9 +67,9 @@ public class HomeController extends BaseController {
         this.doGet(req, resp);
     }
     
-    private WeatherWebDto createWeatherWebDto(Location location) {
+    private WeatherResponse createWeatherWebDto(Location location) {
         WeatherApiResponseDto response = weatherApiService.searchWeatherByLocation(location);
         response.setName(location.getName());
-        return new WeatherWebDto(location.getId(), response);
+        return new WeatherResponse(location.getId(), response);
     }
 }

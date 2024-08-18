@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WeatherWebDto {
+public class WeatherResponse {
     private Long locationId;
     private WeatherApiResponseDto weather;
 }

@@ -27,7 +27,7 @@ public class LoginController extends BaseController {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         
-        if (username == null || password == null || username.isEmpty() || username.isBlank() || password.isEmpty() || password.isBlank()) {
+        if (username == null || password == null || username.isBlank() || password.isBlank()) {
             throw new IncorrectPasswordException();
         }
         

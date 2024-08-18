@@ -21,7 +21,7 @@ public class LocationService {
     
     
     public void saveLocation(SaveLocationRequestDto dto) throws LocationExistsException {
-        Location location = dto.getLocation();
+        Location location = new Location(dto.getLongitude(), dto.getLatitude(), dto.getName());
         User user = dto.getUser();
         
         location.setUser(user);

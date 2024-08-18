@@ -52,17 +52,12 @@ public class SearchLocationController extends BaseController {
         String lat = req.getParameter("lat");
         String lon = req.getParameter("lon");
         
-        if (name == null || lat == null || lon == null
-                || name.isEmpty() || name.isBlank()
-                || lat.isBlank() || lat.isEmpty()
-                || lon.isBlank() || lon.isEmpty()) {
+        if (name == null || lat == null || lon == null || name.isBlank() || lat.isBlank() || lon.isBlank()) {
             resp.sendRedirect(req.getContextPath() + "/");
             return;
         }
         
-        Location location = new Location(new BigDecimal(lon), new BigDecimal(lat), name);
-        
-        SaveLocationRequestDto dto = new SaveLocationRequestDto(user, location);
+        SaveLocationRequestDto dto = new SaveLocationRequestDto(user, new BigDecimal(lat), new BigDecimal(lon), name);
         locationService.saveLocation(dto);
         resp.sendRedirect(req.getContextPath() + "/");
     }
