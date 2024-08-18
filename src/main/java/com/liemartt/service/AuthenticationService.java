@@ -43,7 +43,7 @@ public class AuthenticationService {
         try {
             UUID sessionUUID = UUID.fromString(sessionId);
             Optional<Session> session = sessionDAO.findById(sessionUUID);
-            return session.isPresent();
+            return session.isPresent() && session.get().getExpiresAt().isAfter(LocalDateTime.now());
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -59,7 +59,8 @@ public class AuthenticationService {
             throw new IncorrectPasswordException("Not found");
         }
         
-        Session session = new Session(UUID.randomUUID(), user, LocalDateTime.now().plusMinutes(SESSION_LIFETIME_MINUTES));
+        Session session = new Session(UUID.randomUUID(), user, LocalDateTime.now()
+                .plusMinutes(SESSION_LIFETIME_MINUTES));
         sessionDAO.save(session);
         
         return session;

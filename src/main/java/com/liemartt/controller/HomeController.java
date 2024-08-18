@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/")
@@ -35,9 +36,12 @@ public class HomeController extends BaseController {
                 .getAuthorizedUser(sessionId)
                 .orElseThrow(() -> new UserNotAuthorizedException("Session " + sessionId + " has expired, please log in"));
         
-        List<WeatherWebDto> weather = new ArrayList<>();
-        authorizedUser.getLocations()
-                .forEach(location -> weather.add(createWeatherWebDto(location)));
+        List<WeatherWebDto> weather =
+                authorizedUser.getLocations()
+                        .stream()
+                        .map(this::createWeatherWebDto)
+                        .sorted(Comparator.comparing(WeatherWebDto::getLocationId))
+                        .toList();
         
         context.setVariable("user", authorizedUser);
         context.setVariable("weatherList", weather);
